@@ -1,11 +1,11 @@
-version: '3.6'
+version: "3.6"
 services:
   nginx:
     image: nginx:latest
     container_name: ${APP_NAME}-nginx
     ports:
-      - '80:80'
-      - '443:443'
+      - "80:80"
+      - "443:443"
     volumes:
       - ./nginx/default.conf:/tmp/default.template
       - ./src:/var/www/html:rw,cached
@@ -19,13 +19,15 @@ services:
     image: mariadb
     container_name: ${APP_NAME}-mysql
     volumes:
-       - './data/db:/var/lib/mysql:delegated'
+      - "./data/db:/var/lib/mysql:delegated"
     environment:
       - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
       - MYSQL_DATABASE=${DB_NAME}
     restart: always
     ports:
-      - '3306:3306'
+      - "3307:3306"
 
   wordpress:
     build:
@@ -49,7 +51,7 @@ services:
       PMA_PORT: 3306
       MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD}"
     ports:
-      - '8080:80'
+      - "8080:80"
     links:
       - mysql:mysql
 
@@ -64,6 +66,6 @@ services:
     image: composer
     container_name: ${APP_NAME}-composer
     working_dir: /var/www/html
-    restart: 'no'
+    restart: "no"
     volumes:
       - ./src:/var/www/html:rw,cached
